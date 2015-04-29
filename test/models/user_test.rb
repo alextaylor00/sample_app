@@ -4,7 +4,8 @@ class UserTest < ActiveSupport::TestCase
 
 	def setup
 		# set up a fake valid user to use in all tests
-		@user = User.new(name: "Alex Taylor", email: "ataylor@skylabhq.com")
+		@user = User.new(name: "Alex Taylor", email: "ataylor@skylabhq.com",
+							password: "foobar", password_confirmation: "foobar")
 	end
 
 	test "should be valid" do
@@ -65,8 +66,10 @@ class UserTest < ActiveSupport::TestCase
 		assert_equal mixed_case_email.downcase, @user.reload.email
 	end
 
-
-
+	test "password should have a minimum length" do
+		@user.password = @user.password_confirmation = "a" * 5
+		assert_not @user.valid?
+	end
 
 
 
