@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 	VALID_EMAIL_REGEX_2 = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i # DISALLOWS MULTIPLE DOTS
 	validates :email, uniqueness: { case_sensitive: false }, presence: true, length: {maximum: 255 }, format: { with: VALID_EMAIL_REGEX_2 }
 
-	validates :password, length: { minimum: 6 }
+	validates :password, length: { minimum: 6 }, allow_blank: true
 
 	has_secure_password # requires bcrypt
 
