@@ -29,7 +29,16 @@ class UsersController < ApplicationController
   end
 
   def new
-  	@user = User.new # create a new user for the form to use
+    
+    if !logged_in?
+      @user = User.new # create a new user for the form to use
+    else
+      @user = User.find(session[:user_id])
+      flash[:warning] = "You've already signed up."
+      redirect_to @user
+
+    end
+  	
   end
 
   def create

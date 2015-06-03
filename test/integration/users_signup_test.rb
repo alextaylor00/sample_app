@@ -2,6 +2,10 @@ require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
 
+  def setup
+    @user = users(:alex)
+  end
+
   test "invalid signup information" do
     get signup_path
     assert_no_difference 'User.count' do
@@ -25,4 +29,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert is_logged_in?
 
   end  
+
+
+  test "visiting signup as logged-in user redirects to their profile" do
+    log_in_as @user
+    get signup_path
+    assert_redirected_to @user
+    assert_not flash.empty?
+  end
+
 end
