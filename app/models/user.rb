@@ -1,9 +1,8 @@
 class User < ActiveRecord::Base
-	attr_accessor :remember_token # virtual attribute, will not be stored in db
+	attr_accessor :remember_token, :activation_token # virtual attribute, will not be stored in db
 
-	before_save do
-		self.email = email.downcase
-	end
+	before_save :downcase_email
+	before_create :create_activation_digest
 
 	validates :name, presence: true, length: { maximum: 50 }
 
@@ -45,4 +44,16 @@ class User < ActiveRecord::Base
 	def User.new_token
 		SecureRandom.urlsafe_base64
 	end
+
+	private
+
+	def downcase_email
+		self.email = email.downcase
+	end
+
+	def create_activation_digest
+		self.activation_token = User.new_token
+		self.activation_digest = User.digest(activation_token)
+	end
+
 end
