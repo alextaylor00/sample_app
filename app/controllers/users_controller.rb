@@ -9,7 +9,8 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@this_user = User.find(params[:id])
+  	@user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def edit
@@ -68,14 +69,6 @@ class UsersController < ApplicationController
                                    :password_confirmation)
     end
 
-    # Confirms a logged-in user.
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url
-      end
-    end
 
     # Confirms that the current user is authorized to perform the action.
     def correct_user
